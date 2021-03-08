@@ -41,7 +41,7 @@ typedef struct s_symbolsInfos {
     size_t adr;
 } symbolsInfos_t;
 
-void check_file(char const *filename);
+int check_file(char const *filename);
 void error_no_file(char const *binary, char const *filename);
 void error_not_recognized(char const *binary, char const *filename);
 void error_truncated(char const *binary, char const *filename);

@@ -118,17 +118,10 @@ void get_symtab(void *data, Elf64_Shdr **symtab, Elf64_Shdr **strtab)
     }
 }
 
-void nm_x64(char *filename)
+void nm_x64(void *data)
 {
-    int fd = open(filename, O_RDONLY);
-    struct stat fd_stat;
-    stat(filename, &fd_stat);
-    void *data =
-        mmap(NULL, fd_stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     Elf64_Shdr *symtab = NULL;
     Elf64_Shdr *strtab = NULL;
     get_symtab(data, &symtab, &strtab);
     fill_symbol_list(data, symtab, strtab);
-    munmap(data, fd_stat.st_size);
-    close(fd);
 }
