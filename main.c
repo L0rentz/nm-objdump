@@ -32,7 +32,10 @@ int main(int ac, char **av)
     int val = 0;
     for (int i = 1; i < ac; i++) {
         if (val = setjmp(s_jumpBuffer)) p[val](av[0], av[i]);
-        else nm_selector(av[i]);
+        else {
+            if (ac > 2) printf("\n%s:\n", av[i]);
+            nm_selector(av[i]);
+        }
     }
     if (ac == 1) {
         if (val = setjmp(s_jumpBuffer)) p[val](av[0], "a.out");
