@@ -7,6 +7,7 @@
 
 SRC			= 	main.c \
 				parser.c \
+				nm_x64.c \
 
 GCC			=	gcc
 

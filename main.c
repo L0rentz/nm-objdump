@@ -18,6 +18,7 @@ int main(int ac, char **av)
         if (val = setjmp(s_jumpBuffer)) p[val](av[0], av[i]);
         else {
             check_file(av[i]);
+            nm_x64(av[i]);
         }
     }
     return (0);
