@@ -5,29 +5,47 @@
 ## Makefile
 ##
 
-SRC			= 	main.c \
-				parser.c \
-				nm_x64.c \
+NM_SRC		= 	nm/main.c \
+				nm/check_file.c \
+				nm/parse_archive.c \
+				nm/symbols_list.c \
+				nm/print_errors.c \
+				nm/nm_x64.c \
+
+OBJ_SRC		= 	objdump/main.c \
 
 GCC			=	gcc
 
-GCCFLAGS 	=	-Wall -Wextra -g3 -O0
+GCCFLAGS 	=	-Wall -Wextra -I nm/ -I objdump/ -g3 -O0
 
-NAME 		= 	my_nm
+NM_NAME 	= 	my_nm
 
-OBJ = $(SRC:.c=.o)
+OBJ_NAME 	= 	my_objdump
 
-all: $(NAME)
+NM_OBJ 		= 	$(NM_SRC:.c=.o)
 
-$(NAME): $(OBJ)
-	$(GCC) -o $(NAME) $(OBJ)
+OBJ_OBJ		= 	$(OBJ_SRC:.c=.o)
+
+all: 		$(NM_NAME) $(OBJ_NAME)
+
+nm:			$(NM_NAME)
+
+objdump:	$(OBJ_NAME)
+
+$(NM_NAME): $(NM_OBJ)
+			$(GCC) -o $(NM_NAME) $(NM_OBJ)
+
+$(OBJ_NAME): $(OBJ_OBJ)
+			$(GCC) -o $(OBJ_NAME) $(OBJ_OBJ)
 
 clean:
-	rm $(OBJ)
+	rm -f $(OBJ_OBJ)
+	rm -f $(NM_OBJ)
 
 fclean: clean
-	rm $(NAME)
+	rm $(NM_NAME)
+	rm $(OBJ_NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re nm objdump

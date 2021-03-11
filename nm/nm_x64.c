@@ -36,53 +36,33 @@ char get_symbol_type(Elf64_Sym sym, Elf64_Shdr *shdr)
     return (c);
 }
 
-void swap(symbolsInfos_t* a, symbolsInfos_t* b)
+char get_other_symbol_type(Elf64_Sym sym, Elf64_Shdr *shdr)
 {
-    symbolsInfos_t tmp = *a;
-    *a = *b;
-    *b = tmp;
-}
-
-int is_sorted(char *a, char *b)
-{
-    int i = 0, j = 0;
-    for (; a[i] != '\0' && b[j] != '\0'; i++, j++) {
-        for (; !isalpha(a[i]); i++);
-        for (; !isalpha(b[j]); j++);
-        if (toupper(a[i]) > toupper(b[j])) return (0);
-        else if (toupper(a[i]) == toupper(b[j])) continue;
-        else return (1);
-    }
-    if (a[i] == '\0' && b[j] == '\0' && j > i) return (0);
-    else if (a[i] != '\0' && b[j] == '\0') return (0);
-    return (1);
-}
-
-void sort_symbol_list(symbolsInfos_t (*list)[], size_t len)
-{
-    for (int i = 0; i < len - 1; i++) {
-        for (int j = 0; j < len - i - 1; j++) {
-            if (!is_sorted((*list)[j].name, (*list)[j + 1].name)) {
-                swap((*list) + j, (*list) + j + 1);
-            }
-        }
-    }
-}
-
-void print_symbol_list(symbolsInfos_t *list, size_t len)
-{
-    char adr_tmp[len][24];
-    int max_adr_len = 16;
-    for (size_t i = 0; i < len; i++)
-        sprintf(adr_tmp[i], "%x", list[i].adr);
-    for (size_t i = 0, spacer = 0; i < len; i++) {
-        spacer = max_adr_len - strlen(adr_tmp[i]);
-        if (strlen(adr_tmp[i]) > 0 && adr_tmp[i][0] != '0')
-            printf("%0*d%s %c %s\n",
-                spacer, 0, adr_tmp[i], list[i].type, list[i].name);
-        else
-            printf("%*s %c %s\n", spacer + 1, "", list[i].type, list[i].name);
-    }
+    char c;
+    if (ELF64_ST_BIND(sym.st_info) == STB_GNU_UNIQUE) c = 'u';
+    else if (ELF64_ST_BIND(sym.st_info) == STB_WEAK) {
+        c = 'W';
+        if (sym.st_shndx == SHN_UNDEF) c = 'w';
+    } else if (ELF64_ST_BIND(sym.st_info) == STB_WEAK
+        && ELF64_ST_TYPE(sym.st_info) == STT_OBJECT) {
+        c = 'V';
+        if (sym.st_shndx == SHN_UNDEF) c = 'v';
+    } else if (sym.st_shndx == SHN_UNDEF) c = 'U';
+    else if (sym.st_shndx == SHN_ABS) c = 'A';
+    else if (sym.st_shndx == SHN_COMMON) c = 'C';
+    else if (shdr[sym.st_shndx].sh_type == SHT_NOBITS
+        && shdr[sym.st_shndx].sh_flags == (SHF_ALLOC | SHF_WRITE)) c = 'B';
+    else if (shdr[sym.st_shndx].sh_type == SHT_PROGBITS
+        && shdr[sym.st_shndx].sh_flags == SHF_ALLOC) c = 'R';
+    else if (shdr[sym.st_shndx].sh_type == SHT_PROGBITS
+        && shdr[sym.st_shndx].sh_flags == (SHF_ALLOC | SHF_WRITE)) c = 'D';
+    else if (shdr[sym.st_shndx].sh_type == SHT_PROGBITS
+        && shdr[sym.st_shndx].sh_flags == (SHF_ALLOC | SHF_EXECINSTR)) c = 'T';
+    else if (shdr[sym.st_shndx].sh_type == SHT_DYNAMIC) c = 'D';
+    else c = '?';
+    if (ELF64_ST_BIND(sym.st_info) == STB_LOCAL && c != '?') c += 32;
+    if (c == '?') c = 't';
+    return (c);
 }
 
 void fill_symbol_list(void *data, Elf64_Shdr *symtab, Elf64_Shdr *strtab)
