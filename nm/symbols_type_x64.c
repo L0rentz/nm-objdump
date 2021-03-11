@@ -19,7 +19,9 @@ char get_symbol_type_next(Elf64_Sym sym, Elf64_Shdr *shdr, char c)
         && shdr[sym.st_shndx].sh_flags == (SHF_ALLOC | SHF_EXECINSTR)) c = 'T';
     if (shdr[sym.st_shndx].sh_type == SHT_DYNAMIC && c == '?') c = 'D';
     if (ELF64_ST_BIND(sym.st_info) == STB_LOCAL && c != '?') c += 32;
-    if (c == '?') c = 't';
+    if (c == '?' && ELF64_ST_BIND(sym.st_info) == 0
+    && ELF64_ST_TYPE(sym.st_info) == 0 && shdr[sym.st_shndx].sh_type == 17
+    && shdr[sym.st_shndx].sh_flags == 0) c = 'n';
     return (c);
 }
 
@@ -39,6 +41,7 @@ char get_symbol_type(Elf64_Sym sym, Elf64_Shdr *shdr)
     if (sym.st_shndx == SHN_UNDEF && c == '?') c = 'U';
     if (sym.st_shndx == SHN_ABS && c == '?') c = 'A';
     if (sym.st_shndx == SHN_COMMON && c == '?') c = 'C';
-    c = get_symbol_type_next(sym, shdr, c);
+    if (c == '?') c = get_symbol_type_next(sym, shdr, c);
+    if (c == '?') c = 't';
     return (c);
 }

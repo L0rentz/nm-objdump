@@ -18,8 +18,8 @@ int is_sorted(char *a, char *b)
 {
     int i = 0, j = 0;
     for (; a[i] != '\0' && b[j] != '\0'; i++, j++) {
-        for (; !isalpha(a[i]); i++);
-        for (; !isalpha(b[j]); j++);
+        for (; !isalnum(a[i]); i++);
+        for (; !isalnum(b[j]); j++);
         if (toupper(a[i]) > toupper(b[j])) return (0);
         else if (toupper(a[i]) == toupper(b[j])) continue;
         else return (1);
@@ -51,7 +51,8 @@ void print_symbol_list(symbolsInfos_t *list, size_t len)
         if (strlen(adr_tmp[i]) > 0 && adr_tmp[i][0] != '0')
             printf("%0*d%s %c %s\n",
                 spacer, 0, adr_tmp[i], list[i].type, list[i].name);
-        else if (list[i].type == 'T')
+        else if (list[i].type == 'T' || list[i].type == 'n'
+        || list[i].type == 'B')
             printf("%0*d%s %c %s\n",
                 spacer, 0, adr_tmp[i], list[i].type, list[i].name);
         else

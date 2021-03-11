@@ -7,7 +7,7 @@
 
 #include "my.h"
 
-jmp_buf s_jumpBuffer;
+jmp_buf s_jumpBuffer = {0, 0, 0};
 
 int check_archive(char const *filename)
 {
