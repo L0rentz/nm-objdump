@@ -73,7 +73,6 @@ void archive_offset_loop(struct stat fd_stat, char *data, errors_t *s_errors)
                 obj_name[k] = '\0';
             }
             s_errors->obj_name = (char *)&obj_name;
-            //printf("----- %x %x %x %c %c %c\n", data[offset - 2], data[offset - 1], data[offset], data[offset + 1], data[offset + 2], data[offset + 3]);
             s_errors->next_obj = offset + atoi(size);
             if (check_format_common(data, offset, fd_stat.st_size, s_errors))
                 continue;
