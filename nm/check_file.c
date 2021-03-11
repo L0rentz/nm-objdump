@@ -34,13 +34,14 @@ int check_file(char const *filename)
     off_t fd_size = lseek(fd, 0, SEEK_END);
     elf = mmap(NULL, fd_size, PROT_READ, MAP_PRIVATE, fd, 0);
     close(fd);
-    if (fd_size > 3) {
+    if (fd_size > 3)
         if (elf->e_ident[EI_MAG0] != 0x7f || elf->e_ident[EI_MAG1] != 'E'
         || elf->e_ident[EI_MAG2] != 'L' || elf->e_ident[EI_MAG3] != 'F') {
             munmap(elf, fd_size), close(fd);
             longjmp(s_jumpBuffer, NOT_RECOGNIZED);
         }
-    }
+    if ((int)(elf->e_shnum * elf->e_shentsize + elf->e_shoff) <= 0)
+        munmap(elf, fd_size), longjmp(s_jumpBuffer, NOT_RECOGNIZED);
     if ((fd_size < 4 && fd_size != 0)
         || elf->e_shnum * elf->e_shentsize + elf->e_shoff != fd_size)
         munmap(elf, fd_size), longjmp(s_jumpBuffer, TRUNCATED);

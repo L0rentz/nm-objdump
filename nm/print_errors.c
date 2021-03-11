@@ -7,22 +7,6 @@
 
 #include "my.h"
 
-void errors_prefix(char const *binary, char const *filename, int select)
-{
-    struct stat stats;
-    fprintf(stderr, binary + 2);
-    if (select == QUOTES) {
-        fprintf(stderr, ": '");
-        fprintf(stderr, filename);
-        fprintf(stderr, "': ");
-    }
-    else {
-        fprintf(stderr, ": ");
-        fprintf(stderr, filename);
-        fprintf(stderr, ": ");
-    }
-}
-
 void error_no_file(char const *binary, char const *filename)
 {
     errors_prefix(binary, filename, QUOTES);
@@ -46,4 +30,10 @@ void error_malformed(char const *binary, char const *filename)
     errors_prefix(binary, filename, NO_QUOTES);
     fprintf(stderr, "malformed archive\n");
     exit(84);
+}
+
+void error_no_symbols(char const *binary, char const *filename)
+{
+    errors_prefix(binary, filename, NO_QUOTES);
+    fprintf(stderr, "no symbols\n");
 }

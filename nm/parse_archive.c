@@ -17,7 +17,20 @@ void shift_array_left(char *arr, int len)
     arr[len - 1] = tmp;
 }
 
-int check_format_error(char *data, int offset,
+int check_format_x64(char *data, int offset,
+    size_t fd_size, errors_t *s_errors)
+{
+    Elf64_Ehdr *elf = (Elf64_Ehdr *)&data[offset];
+    if ((elf->e_shnum * elf->e_shentsize + elf->e_shoff
+    != s_errors->next_obj - offset || data[s_errors->next_obj + 58] != 0x60
+    || data[s_errors->next_obj + 59] != 0x0A) && s_errors->next_obj < fd_size) {
+        error_not_recognized(s_errors->binary, s_errors->obj_name);
+        return (1);
+    }
+    return (0);
+}
+
+int check_format_common(char *data, int offset,
     size_t fd_size, errors_t *s_errors)
 {
     if (fd_size < offset
@@ -27,7 +40,7 @@ int check_format_error(char *data, int offset,
         exit(84);
     }
     if (fd_size < offset + 3) {
-        error_not_recognized(s_errors->binary, s_errors->obj_name);
+        error_truncated(s_errors->binary, s_errors->obj_name);
         return (1);
     }
     if (data[offset] != 0x7f || data[offset + 1] != 'E'
@@ -35,15 +48,8 @@ int check_format_error(char *data, int offset,
         error_not_recognized(s_errors->binary, s_errors->obj_name);
         return (1);
     }
-    Elf64_Ehdr *elf = (Elf64_Ehdr *)&data[offset];
-    int size = 1, tmp = offset + 1;
-    for (; tmp + 1 <= fd_size && (data[tmp] != 0x7f || data[tmp + 1] != 'E'
-    || data[tmp + 2] != 'L' || data[tmp + 3] != 'F'); tmp++, size++);
-    if (tmp + 1 <= fd_size) size -= 60;
-    if (elf->e_shnum * elf->e_shentsize + elf->e_shoff != size) {
-        error_not_recognized(s_errors->binary, s_errors->obj_name);
+    if (check_format_x64(data, offset, fd_size, s_errors))
         return (1);
-    }
     return (0);
 }
 
@@ -68,10 +74,11 @@ void archive_offset_loop(struct stat fd_stat, char *data, errors_t *s_errors)
             }
             s_errors->obj_name = (char *)&obj_name;
             //printf("----- %x %x %x %c %c %c\n", data[offset - 2], data[offset - 1], data[offset], data[offset + 1], data[offset + 2], data[offset + 3]);
-            if (check_format_error(data, offset, fd_stat.st_size, s_errors))
+            s_errors->next_obj = offset + atoi(size);
+            if (check_format_common(data, offset, fd_stat.st_size, s_errors))
                 continue;
             printf("\n%s:\n", obj_name);
-            nm_x64(&data[offset]);
+            nm_x64(&data[offset], s_errors);
         }
     }
 }

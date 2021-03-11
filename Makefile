@@ -10,6 +10,7 @@ NM_SRC		= 	nm/main.c \
 				nm/parse_archive.c \
 				nm/symbols_list.c \
 				nm/print_errors.c \
+				nm/print_errors_prefix.c \
 				nm/nm_x64.c \
 
 OBJ_SRC		= 	objdump/main.c \
@@ -33,18 +34,18 @@ nm:			$(NM_NAME)
 objdump:	$(OBJ_NAME)
 
 $(NM_NAME): $(NM_OBJ)
-			$(GCC) -o $(NM_NAME) $(NM_OBJ)
+			$(GCC) -o $(NM_NAME) $(NM_OBJ) $(GCCFLAGS)
 
 $(OBJ_NAME): $(OBJ_OBJ)
-			$(GCC) -o $(OBJ_NAME) $(OBJ_OBJ)
+			$(GCC) -o $(OBJ_NAME) $(OBJ_OBJ) $(GCCFLAGS)
 
 clean:
 	rm -f $(OBJ_OBJ)
 	rm -f $(NM_OBJ)
 
 fclean: clean
-	rm $(NM_NAME)
-	rm $(OBJ_NAME)
+	rm -f $(NM_NAME)
+	rm -f $(OBJ_NAME)
 
 re: fclean all
 

@@ -30,10 +30,10 @@ enum {
     MALFORMED_AR
 };
 
-enum {
+typedef enum {
     QUOTES,
     NO_QUOTES
-};
+} FORMAT;
 
 typedef struct s_symbolsInfos {
     char *name;
@@ -45,17 +45,20 @@ typedef struct s_errors {
     char *filename;
     char *binary;
     char *obj_name;
+    size_t next_obj;
 } errors_t;
 
 
 int check_file(char const *filename);
 int check_archive(char const *filename);
 void parse_archive(errors_t *s_errors);
+void errors_prefix(char const *binary, char const *filename, FORMAT quotes);
 void error_no_file(char const *binary, char const *filename);
 void error_not_recognized(char const *binary, char const *filename);
 void error_truncated(char const *binary, char const *filename);
 void error_malformed(char const *binary, char const *filename);
-void nm_x64();
+void error_no_symbols(char const *binary, char const *filename);
+void nm_x64(void *data, errors_t *s_errors);
 void sort_symbol_list(symbolsInfos_t (*list)[], size_t len);
 void print_symbol_list(symbolsInfos_t *list, size_t len);
 

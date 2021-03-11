@@ -19,7 +19,7 @@ void nm_selector(errors_t *s_errors, int ac)
         parse_archive(s_errors);
     } else {
         if (ac > 2) printf("\n%s:\n", s_errors->filename);
-        nm_x64(data);
+        nm_x64(data, s_errors);
     }
     munmap(data, fd_stat.st_size);
     close(fd);

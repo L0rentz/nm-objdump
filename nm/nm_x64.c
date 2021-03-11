@@ -98,10 +98,14 @@ void get_symtab(void *data, Elf64_Shdr **symtab, Elf64_Shdr **strtab)
     }
 }
 
-void nm_x64(void *data)
+void nm_x64(void *data, errors_t *s_errors)
 {
     Elf64_Shdr *symtab = NULL;
     Elf64_Shdr *strtab = NULL;
     get_symtab(data, &symtab, &strtab);
+    if (symtab == NULL || strtab == NULL) {
+        error_no_symbols(s_errors->binary, s_errors->filename);
+        return;
+    }
     fill_symbol_list(data, symtab, strtab);
 }
