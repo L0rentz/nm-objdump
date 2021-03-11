@@ -7,8 +7,6 @@
 
 #include "my.h"
 
-jmp_buf s_jumpBuffer;
-
 void shift_array_left(char *arr, int len)
 {
     char tmp = arr[0];

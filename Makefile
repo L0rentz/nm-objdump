@@ -11,6 +11,7 @@ NM_SRC		= 	nm/main.c \
 				nm/symbols_list.c \
 				nm/print_errors.c \
 				nm/print_errors_prefix.c \
+				nm/symbols_type_x64.c \
 				nm/nm_x64.c \
 
 OBJ_SRC		= 	objdump/main.c \

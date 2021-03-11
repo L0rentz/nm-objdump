@@ -48,7 +48,6 @@ typedef struct s_errors {
     size_t next_obj;
 } errors_t;
 
-
 int check_file(char const *filename);
 int check_archive(char const *filename);
 void parse_archive(errors_t *s_errors);
@@ -61,5 +60,6 @@ void error_no_symbols(char const *binary, char const *filename);
 void nm_x64(void *data, errors_t *s_errors);
 void sort_symbol_list(symbolsInfos_t (*list)[], size_t len);
 void print_symbol_list(symbolsInfos_t *list, size_t len);
+char get_symbol_type(Elf64_Sym sym, Elf64_Shdr *shdr);
 
 #endif /* !MY_H_ */

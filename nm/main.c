@@ -7,6 +7,8 @@
 
 #include "my.h"
 
+jmp_buf s_jumpBuffer;
+
 void nm_selector(errors_t *s_errors, int ac)
 {
     int fd = open(s_errors->filename, O_RDONLY);
