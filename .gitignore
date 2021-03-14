@@ -1,5 +1,7 @@
 .vscode
 *.o
 my_nm
+my_objdump
 *.a
 *.so
+filezilla

@@ -7,14 +7,26 @@
 
 NM_SRC		= 	nm/main.c \
 				nm/check_file.c \
-				nm/parse_archive.c \
+				nm/parse_archive_x64.c \
+				nm/parse_archive_x86.c \
 				nm/symbols_list.c \
 				nm/print_errors.c \
 				nm/print_errors_prefix.c \
 				nm/symbols_type_x64.c \
+				nm/symbols_type_x86.c \
 				nm/nm_x64.c \
+				nm/nm_x86.c \
+				nm/utils.c \
 
 OBJ_SRC		= 	objdump/main.c \
+				objdump/check_file.c \
+				objdump/parse_archive_x64.c \
+				objdump/parse_archive_x86.c \
+				objdump/print_errors.c \
+				objdump/print_errors_prefix.c \
+				objdump/objdump_x64.c \
+				objdump/objdump_x86.c \
+				objdump/utils.c \
 
 GCC			=	gcc
 

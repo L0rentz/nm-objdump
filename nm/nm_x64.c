@@ -7,7 +7,7 @@
 
 #include "my.h"
 
-void fill_symbol_list(void *data, Elf64_Shdr *symtab, Elf64_Shdr *strtab)
+void fill_symbol_list_x64(void *data, Elf64_Shdr *symtab, Elf64_Shdr *strtab)
 {
     Elf64_Ehdr *elf = (Elf64_Ehdr *)data;
     Elf64_Shdr *shdr = (Elf64_Shdr *)((char *)data + elf->e_shoff);
@@ -18,7 +18,7 @@ void fill_symbol_list(void *data, Elf64_Shdr *symtab, Elf64_Shdr *strtab)
     for (size_t i = 0; i < symtab->sh_size / symtab->sh_entsize; i++) {
         if ((str + sym[i].st_name)[0] == '\0'
             || ELF64_ST_TYPE(sym[i].st_info) == 4) continue;
-        list[len].type = get_symbol_type(sym[i], shdr);
+        list[len].type = get_symbol_type_x64(sym[i], shdr);
         list[len].name = str + sym[i].st_name;
         list[len].adr = sym[i].st_value;
         len++;
@@ -27,7 +27,7 @@ void fill_symbol_list(void *data, Elf64_Shdr *symtab, Elf64_Shdr *strtab)
     print_symbol_list(list, len);
 }
 
-void get_symtab(void *data, Elf64_Shdr **symtab, Elf64_Shdr **strtab)
+void get_symtab_x64(void *data, Elf64_Shdr **symtab, Elf64_Shdr **strtab)
 {
     Elf64_Ehdr *elf = (Elf64_Ehdr *)data;
     Elf64_Shdr *shdr = (Elf64_Shdr *)((char *)data + elf->e_shoff);
@@ -44,10 +44,10 @@ void nm_x64(void *data, errors_t *s_errors)
 {
     Elf64_Shdr *symtab = NULL;
     Elf64_Shdr *strtab = NULL;
-    get_symtab(data, &symtab, &strtab);
+    get_symtab_x64(data, &symtab, &strtab);
     if (symtab == NULL || strtab == NULL) {
         error_no_symbols(s_errors->binary, s_errors->filename);
         return;
     }
-    fill_symbol_list(data, symtab, strtab);
+    fill_symbol_list_x64(data, symtab, strtab);
 }
