@@ -33,7 +33,7 @@ void get_symtab_x86(void *data, Elf32_Shdr **symtab, Elf32_Shdr **strtab)
     Elf32_Shdr *shdr = (Elf32_Shdr *)((char *)data + elf->e_shoff);
     char *str = (char *)(data + shdr[elf->e_shstrndx].sh_offset);
     for (int i = 0; i < elf->e_shnum; i++) {
-        if (strcmp(&str[shdr[i].sh_name], ".dynsym") == 0)
+        if (strcmp(&str[shdr[i].sh_name], ".symtab") == 0)
             (*symtab) = (Elf32_Shdr *)&shdr[i];
         if (strcmp(&str[shdr[i].sh_name], ".strtab") == 0)
             (*strtab) = (Elf32_Shdr *)&shdr[i];
