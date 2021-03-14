@@ -64,7 +64,7 @@ void error_directory(char const *binary, char const *filename);
 void nm_x64(void *data, errors_t *s_errors);
 void nm_x86(void *data, errors_t *s_errors);
 void sort_symbol_list(symbolsInfos_t (*list)[], size_t len);
-void print_symbol_list(symbolsInfos_t *list, size_t len);
+void print_symbol_list(symbolsInfos_t *list, size_t len, int type);
 char get_symbol_type_x64(Elf64_Sym sym, Elf64_Shdr *shdr);
 char get_symbol_type_x86(Elf32_Sym sym, Elf32_Shdr *shdr);
 int find_archive_type(char *data, off_t fd_size);

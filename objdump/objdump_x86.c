@@ -18,7 +18,6 @@ unsigned int get_flags_x86(Elf32_Ehdr *elf, Elf32_Shdr *shdr)
     return (flags);
 }
 
-
 int skip_sections_x86(Elf32_Ehdr *elf, Elf32_Shdr	*shdr, int index)
 {
     static char *to_skip[] = { "", ".bss", ".shstrtab", ".symtab", ".strtab",

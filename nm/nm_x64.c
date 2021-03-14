@@ -24,7 +24,7 @@ void fill_symbol_list_x64(void *data, Elf64_Shdr *symtab, Elf64_Shdr *strtab)
         len++;
     }
     sort_symbol_list(&list, len);
-    print_symbol_list(list, len);
+    print_symbol_list(list, len, 0);
 }
 
 void get_symtab_x64(void *data, Elf64_Shdr **symtab, Elf64_Shdr **strtab)

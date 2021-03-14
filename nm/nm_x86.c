@@ -24,7 +24,7 @@ void fill_symbol_list_x86(void *data, Elf32_Shdr *symtab, Elf32_Shdr *strtab)
         len++;
     }
     sort_symbol_list(&list, len);
-    print_symbol_list(list, len);
+    print_symbol_list(list, len, 1);
 }
 
 void get_symtab_x86(void *data, Elf32_Shdr **symtab, Elf32_Shdr **strtab)

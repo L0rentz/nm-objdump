@@ -40,10 +40,11 @@ void sort_symbol_list(symbolsInfos_t (*list)[], size_t len)
     }
 }
 
-void print_symbol_list(symbolsInfos_t *list, size_t len)
+void print_symbol_list(symbolsInfos_t *list, size_t len, int type)
 {
     char adr_tmp[len][24];
-    int max_adr_len = 8;
+    int max_adr_len = 16;
+    if (type == 1) max_adr_len = 8;
     for (size_t i = 0; i < len; i++)
         sprintf(adr_tmp[i], "%x", list[i].adr);
     for (size_t i = 0, spacer = 0; i < len; i++) {
