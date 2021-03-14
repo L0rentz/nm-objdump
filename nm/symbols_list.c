@@ -7,7 +7,7 @@
 
 #include "my.h"
 
-void swap(symbolsInfos_t* a, symbolsInfos_t* b)
+void swap(symbolsInfos_t *a, symbolsInfos_t *b)
 {
     symbolsInfos_t tmp = *a;
     *a = *b;

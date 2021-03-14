@@ -37,19 +37,19 @@ int find_archive_type(char *data, off_t fd_size)
 
 void flags_writer(unsigned int flags)
 {
-	char *comma = "";
+    char *comma = "";
     int flags_array[9] = { HAS_RELOC, EXEC_P, HAS_LINENO, HAS_DEBUG, HAS_SYMS,
         HAS_LOCALS, DYNAMIC, WP_TEXT, D_PAGED };
     char *strings_array[] = { "HAS_RELOC", "EXEC_P",
         "HAS_LINENO", "HAS_DEBUG", "HAS_SYMS", "HAS_LOCALS",
         "DYNAMIC", "WP_TEXT", "D_PAGED" };
-    for (int i = 0; i < 9; i ++) {
+    for (int i = 0; i < 9; i++) {
         if (flags & flags_array[i]) {
-		    printf("%s%s", comma, strings_array[i]);
-		    comma = ", ";
+            printf("%s%s", comma, strings_array[i]);
+            comma = ", ";
         }
-	}
-	printf("\n");
+    }
+    printf("\n");
 }
 
 void hexa_display(unsigned char *data, int size)

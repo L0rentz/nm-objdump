@@ -31,7 +31,7 @@ int skip_sections_x86(Elf32_Ehdr *elf, Elf32_Shdr	*shdr, int index)
     for (int i = 0; to_skip[i] != NULL; i++) {
         shdr_str = (char *)elf + shdr[elf->e_shstrndx].sh_offset;
         if (!strcmp(to_skip[i], &shdr_str[shdr[index].sh_name]))
-	        return (1);
+            return (1);
     }
     return (0);
 }
@@ -51,15 +51,15 @@ void dump_inner_loop_x86(Elf32_Ehdr *elf, Elf32_Shdr *shdr, int i)
 void dump_data_x86(void *data)
 {
     Elf32_Ehdr *elf = (Elf32_Ehdr *)data;
-	Elf32_Shdr *shdr = (Elf32_Shdr *)((char *)data + elf->e_shoff);
+    Elf32_Shdr *shdr = (Elf32_Shdr *)((char *)data + elf->e_shoff);
     char *shdr_str = NULL;
-	for (int i = 0; i < elf->e_shnum; i++) {
+    for (int i = 0; i < elf->e_shnum; i++) {
         if (skip_sections_x86(elf, shdr, i) == 0) {
             shdr_str = (char *)data + shdr[elf->e_shstrndx].sh_offset;
             printf("Contents of section %s:\n", &shdr_str[shdr[i].sh_name]);
             dump_inner_loop_x86(elf, shdr, i);
         }
-	}
+    }
 }
 
 void objdump_x86(void *data, errors_t *s_errors, int archive)
